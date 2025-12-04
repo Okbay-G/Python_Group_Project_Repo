@@ -1,0 +1,47 @@
+[
+  {
+    "first_name": "20023",
+    "last_name": "XXX",
+    "sex": "F",
+    "address": "Flurstrasse 80\n 8000 Zürich\n Schweiz",
+    "gross_salary": 2000,
+    "social_deduction": 0,
+    "expenses": 0
+  },
+  {
+    "first_name": "Minimal tax",
+    "last_name": "Goitom",
+    "sex": "M",
+    "address": "General-Weber-Strasse 6\n 8500 Frauenfeld\n Schweiz",
+    "gross_salary": 1500,
+    "social_deduction": 0,
+    "expenses": 0
+  },
+    {
+    "first_name": "Next tax",
+    "last_name": "Goitom",
+    "sex": "M",
+    "address": "General-Weber-Strasse 6\n 8500 Frauenfeld\n Schweiz",
+    "gross_salary": 3500,
+    "social_deduction": 10,
+    "expenses": 100
+  },
+    {
+    "first_name": "6000 tax",
+    "last_name": "Goitom",
+    "sex": "M",
+    "address": "General-Weber-Strasse 6\n 8500 Frauenfeld\n Schweiz",
+    "gross_salary": 6000,
+    "social_deduction": 60,
+    "expenses": 30
+  },
+    {
+    "first_name": "100000 tax",
+    "last_name": "Goitom",
+    "sex": "M",
+    "address": "General-Weber-Strasse 6\n 8500 Frauenfeld\n Schweiz",
+    "gross_salary": 100000,
+    "social_deduction": 5000,
+    "expenses": 3000
+  }
+]
