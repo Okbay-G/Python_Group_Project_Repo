@@ -1,5 +1,5 @@
-from TaxPrinter import create_tax_letter  # not used yet
-from TaxCalculator import calculate_tax   # not used yet
+from TaxPrinter import create_tax_letter
+from TaxCalculator import calculate_tax
 import re
 
 # Request input from user with validation for required fields.
@@ -81,8 +81,49 @@ def requestInput():
 
     return person
 
-
+# Main function to process console input
 def processConsoleInput():
-    # TODO: use requestInput(), calculate tax and print letter
-    pass
-#commit message:add input validation for console and JSON processingg
+    print("Welcome to Tax Data Processor")
+    
+    while True:
+        person = requestInput()
+        formatted_name = format_name(person['first_name'], person['last_name'])
+        sex = format_sex(person['sex'])
+        address = person['address'] 
+        gross_salary = person['gross_salary']
+        social_deduction = person['social_deduction']
+        expenses = person['expenses']
+
+        net_salary, total_deductions = calculate_financials(gross_salary, social_deduction, expenses)
+        tax_info = calculate_tax(net_salary)
+        create_tax_letter(formatted_name['first_name'], formatted_name['last_name'], sex, address,
+                          gross_salary, total_deductions, net_salary,
+                          tax_info['percentage'], tax_info['tax'])
+
+        if not continue_prompt():
+            print("Thank you. Exiting.")
+            return
+
+def format_name(first_name, last_name):
+    return {
+        "first_name": first_name[0].upper() + first_name[1:].lower(),
+        "last_name": last_name[0].upper() + last_name[1:].lower()
+    }
+
+def format_sex(sex):
+    return sex[0].upper()  # Take first letter and uppercase it
+
+def calculate_financials(gross_salary, social_deduction, expenses):
+    total_deductions = social_deduction + expenses
+    net_salary = gross_salary - total_deductions
+    return net_salary, total_deductions
+
+def continue_prompt():
+    while True:
+        cont = input("Do you want to add another record? (y/n): ").strip().lower()
+        if cont in ('y', 'yes'):
+            return True  # continue outer loop to add another record
+        if cont in ('n', 'no'):
+            return False
+        print("Please enter 'y' or 'n'.")
+

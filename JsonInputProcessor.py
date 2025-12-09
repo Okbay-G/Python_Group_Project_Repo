@@ -4,6 +4,8 @@ import TaxCalculator
 import re
 import os
 
+#file_path = 'D:/Desktop/LocalRepo/Python_Group_Project_Repo/Python_Code/tax_data.json'
+
 # Validates that a person record contains all required fields with valid formats and values
 def validate_input(person):
     required_fields = ['first_name', 'last_name', 'sex', 'address', 'gross_salary', 'social_deduction', 'expenses']
@@ -67,13 +69,46 @@ def load_json_file(path):
         print(f"Error opening file: {e}. Please try again.")
     return None
 
-
+# Processes a single person record by extracting data, validating it, and generating tax letter
 def process_person(person):
-    # TODO: validate record, calculate tax and create letter
-    pass
+    try:
+        first_name = str(person.get('first_name', '')).strip().capitalize()
+        last_name = str(person.get('last_name', '')).strip().capitalize()
+        sex = person.get('sex', '')
+        address = person.get('address', '')
+        gross_salary = float(person.get('gross_salary', 0))
+        social_deduction = float(person.get('social_duction', 0))
+        expenses = float(person.get('expenses', 0))
+    except Exception as e:
+        print(f"Skipping record due to read/convert error: {e}. Record: {person}")
+        return
+
+    if validate_input(person):
+        try:
+            total_deductions = social_deduction + expenses
+            net_salary = gross_salary - total_deductions
+            tax_info = TaxCalculator.calculate_tax(net_salary)
+            TaxPrinter.create_tax_letter(
+                first_name,
+                last_name,
+                sex,
+                address,
+                gross_salary,
+                total_deductions,
+                net_salary,
+                tax_info.get('percentage'),
+                tax_info.get('tax')
+            )
+        except Exception as e:
+            print(f"Error processing record for {first_name} {last_name}: {e}")
 
 # Main entry point that loads JSON file and processes all person records
 def processJSON():
-    # TODO: load JSON file and process all person records
-    pass
+    path = get_file_path()
+    data = load_json_file(path)
+    if data is None or not isinstance(data, list):
+        print(f"Expected a JSON array of person records, but root is {type(data).__name__}. Please provide a JSON array.")
+        return
 
+    for person in data:
+        process_person(person)
