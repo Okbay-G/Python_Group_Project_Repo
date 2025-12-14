@@ -1,14 +1,34 @@
+"""Console input processor for tax information collection and processing.
+
+This module handles user input validation, data collection, and coordination
+with tax calculation and letter generation modules.
+"""
+
 from TaxPrinter import create_tax_letter
 from TaxCalculator import calculate_tax
 import re
 
-# Request input from user with validation for required fields.
+
 def requestInput():
+    """Collect and validate tax information from user input.
+    
+    Prompts user for personal and financial information with validation
+    for each field according to specific format requirements.
+    
+    Returns:
+        dict: Dictionary containing validated user information with keys:
+            first_name, last_name, sex, address, gross_salary,
+            social_deduction, expenses.
+    """
 
     print("=== Enter Tax Information ===")
 
     def get_name(prompt):
-        # Allow Unicode letters (including German/French accents), spaces, apostrophes and hyphens
+        """Validate and return a name input.
+        
+        Allows Unicode letters (including accented characters), spaces,
+        apostrophes, and hyphens. Rejects digits and special characters.
+        """
         pattern = re.compile(r"^[^\W\d_]+(?:[ '\-][^\W\d_]+)*$", re.UNICODE)
         while True:
             val = input(prompt).strip()
@@ -21,9 +41,7 @@ def requestInput():
             return val
 
     def get_address(prompt):
-        # Allow Unicode letters (including ä, ö, ü, è, etc.), spaces, apostrophes and hyphens.
-        # Expected format: StreetName StreetNumber ZipCode(4 digits) City
-        # Examples: "Bahnhofstrasse 12 8001 Zürich", "General Weberstrasse 12 8001 Zürich", "Main-Street 5 1003 Lausanne"
+        """Validate and return a Swiss address in format: Street Number Zipcode City."""
         pattern = re.compile(
             r"^[^\W\d_]+(?:[ '\-\.][^\W\d_]+)*\s+\d+[A-Za-z]?\s+\d{4}\s+[^\W\d_]+(?:[ '\-][^\W\d_]+)*$",
             re.UNICODE,
@@ -39,14 +57,17 @@ def requestInput():
             return val
 
     def get_sex(prompt):
+        """Validate and return sex as 'male' or 'female'.
+        
+        Accepts variations: male, female, m, f, man, woman.
+        Normalizes man/woman to male/female.
+        """
         valid = {"male", "female", "m", "f", "man", "woman"}
-        valid_input = {"male", "female", "m", "f"}
         while True:
             val = input(prompt).strip().lower()
             if val not in valid:
                 print(f"Error: enter one of: male, female, man, woman, m, f.")
                 continue
-            # Convert man/woman to male/female
             if val == "man":
                 return "male"
             elif val == "woman":
@@ -54,7 +75,7 @@ def requestInput():
             return val
 
     def get_number(prompt):
-        # Accept only non-negative decimal numbers (digits and optional single dot)
+        """Validate and return a non-negative decimal number."""
         pattern = re.compile(r"^\d+(\.\d+)?$")
         while True:
             s = input(prompt).strip()
@@ -81,8 +102,13 @@ def requestInput():
 
     return person
 
-# Main function to process console input
+
 def processConsoleInput():
+    """Process tax information in a loop until user exits.
+    
+    Collects user input, calculates financials and taxes, generates
+    tax letters, and prompts for additional records.
+    """
     print("Welcome to Tax Data Processor")
     
     while True:
@@ -104,25 +130,54 @@ def processConsoleInput():
             print("Thank you. Exiting.")
             return
 
+
 def format_name(first_name, last_name):
+    """Format name with proper capitalization.
+    
+    Args:
+        first_name: First name string.
+        last_name: Last name string.
+    
+    Returns:
+        dict: Dictionary with capitalized first_name and last_name.
+    """
     return {
         "first_name": first_name[0].upper() + first_name[1:].lower(),
         "last_name": last_name[0].upper() + last_name[1:].lower()
     }
 
+
 def format_sex(sex):
-    return sex[0].upper()  # Take first letter and uppercase it
+    """Return uppercase first letter of sex designation."""
+    return sex[0].upper()
+
 
 def calculate_financials(gross_salary, social_deduction, expenses):
+    """Calculate net salary and total deductions.
+    
+    Args:
+        gross_salary: Gross salary amount.
+        social_deduction: Social security deduction amount.
+        expenses: Expenses amount.
+    
+    Returns:
+        tuple: (net_salary, total_deductions)
+    """
     total_deductions = social_deduction + expenses
     net_salary = gross_salary - total_deductions
     return net_salary, total_deductions
 
+
 def continue_prompt():
+    """Prompt user whether to process another record.
+    
+    Returns:
+        bool: True to continue, False to exit.
+    """
     while True:
         cont = input("Do you want to add another record? (y/n): ").strip().lower()
         if cont in ('y', 'yes'):
-            return True  # continue outer loop to add another record
+            return True
         if cont in ('n', 'no'):
             return False
         print("Please enter 'y' or 'n'.")
