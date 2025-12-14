@@ -6,8 +6,27 @@ import os
 
 #file_path = 'D:/Desktop/LocalRepo/Python_Group_Project_Repo/Python_Code/tax_data.json'
 
-# Validates that a person record contains all required fields with valid formats and values
 def validate_input(person):
+    """Validate a person record for required fields and correct data types.
+
+    This function checks that a person dictionary contains all required fields
+    with valid values. It validates that name fields contain only alphabetic
+    characters, spaces, hyphens, and apostrophes. It also ensures that numeric
+    fields contain valid numbers and that gross_salary is non-negative.
+    Args:
+        person (dict): A dictionary containing person data with the following keys:
+            - first_name (str): The person's first name
+            - last_name (str): The person's last name
+            - sex (str): The person's sex
+            - address (str): The person's address
+            - gross_salary (float): The person's gross salary (must be non-negative)
+            - social_deduction (float): The person's social deduction amount
+            - expenses (float): The person's expenses amount
+    Returns:
+        bool: True if the person record is valid, False otherwise.
+    Side Effects:
+        Prints error messages to stdout for each validation failure encountered.
+    """
     required_fields = ['first_name', 'last_name', 'sex', 'address', 'gross_salary', 'social_deduction', 'expenses']
     name_pattern = re.compile(r"^[A-Za-z\s'\-]+$")
     numeric_fields = ['gross_salary', 'social_deduction', 'expenses']
