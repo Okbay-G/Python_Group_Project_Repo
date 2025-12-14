@@ -1,4 +1,3 @@
-# Function to calculate tax based on net salary using a progressive model
 def calculate_tax(net_salary):
     """Calculate income tax based on progressive tax brackets.
 
